@@ -5,7 +5,7 @@ function to() {
 		.)
 			get_path $1
 			bn="$( basename $dpath )"
-			echo "cd $dpath" > "${TO_DIR}/list/$bn"
+			echo "$dpath" > "${TO_DIR}/list/$bn"
 			echo "create a new link with name: $bn"
 			echo "actual path: $dpath"
 			;;
@@ -13,13 +13,13 @@ function to() {
 			if [ "$3" = "" ]; then
 				get_path $2
 				bn="$( basename $dpath )"
-				echo "cd $dpath" > "${TO_DIR}/list/$bn"
+				echo "$dpath" > "${TO_DIR}/list/$bn"
 				echo "create a new link with name: $bn"
 				echo "actual path: $dpath"
 			else
 				get_path $3
 				# ln -s "$dpath" "${TO_DIR}/list/$2"
-				echo "cd $dpath" > "${TO_DIR}/list/$2"
+				echo "$dpath" > "${TO_DIR}/list/$2"
 				echo "create a new link with name: $2"
 				echo "actual path: $dpath"
 			fi
@@ -31,9 +31,10 @@ function to() {
 			ls "${TO_DIR}/list"
 			;;
 		*)
-			# cd "${TO_DIR}/list/$1"
-			if [ -f "${TO_DIR}/list/$1" ]; then
-				source "${TO_DIR}/list/$1"
+			IFS="/" read -r name path <<< $1
+			if [ -f "${TO_DIR}/list/$name" ]; then
+				read -r p < "${TO_DIR}/list/$name" 
+				cd "$p/$path"
 			else
 				echo "$1 does not exist"
 			fi
