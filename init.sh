@@ -6,6 +6,10 @@ function get_path() {
 	dpath="$( cd $1 && pwd -P )"
 }
 
+function get_dir() {
+	base=$( dirname $1 )
+	dpath="$( cd $base && pwd -P )"
+}
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
 FILES="$( cd $SCRIPT_DIR && ls -d -- */ )"

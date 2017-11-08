@@ -31,12 +31,12 @@ function to() {
 			ls "${TO_DIR}/list"
 			;;
 		*)
-			IFS="/" read -r name path <<< $1
+			IFS="/" read -r name path <<< "$1" # "$1", the quote is very important
 			if [ -f "${TO_DIR}/list/$name" ]; then
 				read -r p < "${TO_DIR}/list/$name" 
 				cd "$p/$path"
 			else
-				echo "$1 does not exist"
+				echo "$name does not exist"
 			fi
 			;;
 	esac

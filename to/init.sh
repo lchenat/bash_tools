@@ -30,8 +30,10 @@ function _complete_list() {
 		fi
 	else
 		COMPREPLY=( $( compgen -W "$list" $name ) )
+		if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+			COMPREPLY[0]="${COMPREPLY[0]}/"
+		fi
 	fi
-	# COMPREPLY=( $( compgen -W '$list' $cur ) )
 	return 0
 }
 
