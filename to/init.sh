@@ -8,6 +8,7 @@ function _complete_list() {
 	local cur
 	COMPREPLY=()
 	cur=${COMP_WORDS[COMP_CWORD]}
+	pre=${COMP_WORDS[COMP_CWORD-1]}
 	list=$( ls "$TO_DIR/list" )
 	IFS="/" read -r name path <<< "$cur"
 	if [[ "$cur" == */ ]]; then

@@ -3,7 +3,7 @@
 function to() {
 	case $1 in
 		.)
-			get_path $1
+			get_dir_path $1
 			bn="$( basename $dpath )"
 			echo "$dpath" > "${TO_DIR}/list/$bn"
 			echo "create a new link with name: $bn"
@@ -11,13 +11,13 @@ function to() {
 			;;
 		-c)
 			if [ "$3" = "" ]; then
-				get_path $2
+				get_dir_path $2
 				bn="$( basename $dpath )"
 				echo "$dpath" > "${TO_DIR}/list/$bn"
 				echo "create a new link with name: $bn"
 				echo "actual path: $dpath"
 			else
-				get_path $3
+				get_dir_path $3
 				# ln -s "$dpath" "${TO_DIR}/list/$2"
 				echo "$dpath" > "${TO_DIR}/list/$2"
 				echo "create a new link with name: $2"
@@ -25,7 +25,8 @@ function to() {
 			fi
 			;;
 		-d)
-			rm -rf "${TO_DIR}/list/$2"
+			p="${2%/}"
+			rm -rf "${TO_DIR}/list/$p"
 			;;
 		-l)
 			ls "${TO_DIR}/list"
