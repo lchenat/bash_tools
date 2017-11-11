@@ -1,5 +1,29 @@
 #!/bin/bash
 
+function tt() {
+	# eval "str"	
+	# for each element check, expand path or keep it
+	res=()
+	for i in "$@"
+	do
+		if [[ "$i" == \~* ]]; then # does not work for only ~
+			p=${i#\~}
+			span_path $p
+			if [[ ! -z $dpath ]]; then
+				res+=( "$dpath" )
+			else
+				echo "unspannable path found"
+				return 1
+			fi
+		else
+			res+=( "$i" )
+		fi
+	done
+	echo "spanned command: ${res[@]}"
+	eval "${res[@]}"
+	return 0		
+}
+
 function to() {
 	case $1 in
 		.)

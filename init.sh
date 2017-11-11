@@ -13,6 +13,12 @@ function get_dir_path() {
 	dpath="$( cd $1 && pwd -P )"
 }
 
+function join_by { 
+	local IFS="$1" 
+	shift 
+	join_str="$*"
+}
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
 FILES="$( cd $SCRIPT_DIR && ls -d -- */ )"
 
