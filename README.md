@@ -22,10 +22,30 @@ to .
 ```
 
 #### Access a directory
-Simple type to and press **[Tab]**, a list of the recorded directories will be shown:
+Simple type **to** and press **[Tab]**, a list of the recorded directories will be shown:
 ```shell
 to [Tab]
 dir1  dir2  dir2
 ```
 
-You can access other files 
+You can even access other files using relative path, and tab completion will also work correctly in this case.
+```shell
+to dir1/../another_dir/
+file_1_in_another_dir file2_in_another_dir
+```
+#### Other commands
+List all links:
+```shell
+to -l
+```
+
+Delete a link:
+```shell
+to -d name_of_the_link
+```
+
+#### Path substitutions
+You can also use these links when executing other commands by the command **tt**, an argument starts with ~ will be expanded according to the link.
+```shell
+tt python ~my_link/hi.py
+```
