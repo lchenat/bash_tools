@@ -3,7 +3,7 @@
 My bash tools for a more convenient life.
 
 ### To
-**To** can help you create a list of your favorite directories you frequently visit, and provide fast access to them.
+**To** can help you create a list of your favorite directories you frequently visit, and provides fast access to them.
 
 #### Create a new link to you favorite directory
 The following command helps you create a link to a directory with a specified link name.
