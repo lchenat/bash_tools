@@ -45,7 +45,7 @@ to -d name_of_the_link
 ```
 
 #### Path substitutions
-You can also use these links when executing other commands by the command **tt**, an argument starts with ~ will be expanded according to the link.
+You can also use these links when executing other commands by the command **tt**, an argument starts with + will be expanded according to the link.
 ```shell
-tt python ~my_link/hi.py
+tt python +my_link/hi.py
 ```

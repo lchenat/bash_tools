@@ -98,9 +98,9 @@ function _complete_tt() {
 	local cur
 	COMPREPLY=()
 	cur=${COMP_WORDS[COMP_CWORD]}
-	list=$( ls "$TO_DIR/list" )
-	if [[ "$cur" == \~* ]]; then
-		p=${cur#\~}
+	list=$( ls "${TO_DIR}/list" )
+	if [[ "$cur" == +* ]]; then
+		p=${cur#+}
 		IFS="/" read -r name path <<< "$p"
 		if [[ "$p" == */ ]]; then
 			path="$path/"
@@ -108,17 +108,18 @@ function _complete_tt() {
 		if [[ "$p" =~ / ]]; then
 			expand_path $name $path	$p 1
 		else
-			COMPREPLY=( $( compgen -W "$list" $name ) )
+			COMPREPLY=( $( compgen -W "$list" "$name" ) )
 			if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
 				COMPREPLY[0]="${COMPREPLY[0]}/"
 			fi
 		fi
-		COMPREPLY=( "${COMPREPLY[@]/#/~}" )
+		COMPREPLY=( "${COMPREPLY[@]/#/+}" )
 	fi
 	return 0
 }
 
 complete -F _complete_to -o nospace -o filenames to 
-complete -F _complete_tt -o nospace -o filenames -o default -b -c tt 
+# complete -F _complete_tt -o nospace -o filenames -o default -b -c tt 
+complete -F _complete_tt -o nospace -o filenames -o default tt 
 
 source "$TO_DIR/to.sh"

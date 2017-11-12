@@ -7,7 +7,7 @@ sys="$( uname -s )"
 case "$sys" in
 	Linux*) 
 		echo "system: Linux"
-		echo "source ${SCRIPT_DIR}/init.sh" >> ~/.bash_bashrc
+		echo "source ${SCRIPT_DIR}/init.sh" >> ~/.bashrc
 		;;
 	Darwin*)
 		echo "system: Mac"
