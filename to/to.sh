@@ -6,8 +6,8 @@ function tt() {
 	res=()
 	for i in "$@"
 	do
-		if [[ "$i" == \~* ]]; then # does not work for only ~
-			p=${i#\~}
+		if [[ "$i" == +* ]]; then # does not work for only ~
+			p=${i#+}
 			span_path $p
 			if [[ ! -z $dpath ]]; then
 				res+=( "$dpath" )
