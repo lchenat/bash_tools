@@ -15,6 +15,9 @@ function g() {
 				git push origin master
 			fi
 			;;
+		pull)
+			git pull origin master
+			;;
 		fpush)
 			git push origin master --force
 			;;
