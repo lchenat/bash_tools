@@ -1,0 +1,71 @@
+:set number
+:set autoindent
+:set tabstop=4
+:set shiftwidth=4
+:map <Enter> o<Esc>
+:set ignorecase
+" :map <F7> :tabp<CR>
+" :map <F8> :tabn<CR>
+:map <Leader>[ :tabp<CR>
+:map <Leader>] :tabn<CR>
+:syntax on
+:filetype plugin on
+:let g:tex_flavor='latex'
+:let g:Imap_UsePlaceHolders = 0
+:let g:Tex_SmartKeyBS = 0
+:let g:Tex_SmartKeyQuote = 0
+:let g:Tex_SmartKeyDot = 0
+:map <Leader>t :w<CR><Leader>ll<CR><Leader>lv<CR>
+" :inoremap ( ()<LEFT>
+" :inoremap [ []<LEFT>
+" :inoremap { {}<LEFT>
+" set main.tex to disable all annoying IMAP, set texrc to disable fold
+autocmd Filetype tex setlocal nofoldenable
+:map <Leader>r :set expandtab<CR>:retab<CR>
+:map <down> gj
+:map <up> gk
+:imap <down> <Esc>gji
+:imap <up> <Esc>gki
+:map 0 g0
+:map ) ^
+:map - g$
+:inoremap <C-k> ()<Left>
+:inoremap <C-l> []<Left>
+set pastetoggle=<F3>
+:map <Leader>n :set invnumber<CR>
+" :map <A-j> dd<Up>y
+" :map <A-k> dd<Down>y
+:map + :m +1<CR>
+:map _ :m -2<CR>
+:map <Leader>f 1<C-g>
+:map <Leader>u :tabnew#<CR>
+" -- delete bracket
+:map ds di(va(p
+:map dq di[va[p
+" -- open and save vimrc
+:nnoremap <leader>ev :tabe $MYVIMRC<cr>
+:nnoremap <leader>sv :source $MYVIMRC<cr>
+:map <leader>y :%w !pbcopy<cr><cr>
+
+augroup AutoSaveFolds
+  autocmd!
+  autocmd BufWinLeave * mkview
+  autocmd BufWinEnter * silent loadview
+augroup END
+
+augroup PythonCmd
+  autocmd!
+  autocmd FileType python :nnoremap <leader>c ^i#<ESC>
+  autocmd FileType python :nnoremap <leader>d ^x
+  autocmd FileType python :nnoremap <leader>t i#######<space><space>#######<left><left><left><left><left><left><left><left>
+  " deg keyword for python
+  autocmd FileType python syntax keyword pyKeyword deg
+  autocmd FileType python highlight link pyKeyword Function
+augroup END
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'scrooloose/nerdtree'
+call vundle#end()
+
