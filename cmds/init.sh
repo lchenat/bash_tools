@@ -12,8 +12,10 @@ function send_git_ssh_key() {
 }
 
 function setup() {
-	chmod +x setups/$1/setup.sh
-	setups/$1/setup.sh
+	#chmod +x "${CMDS_DIR}/setups/$1/setup.sh"
+	#${CMDS_DIR}/setups/$1/setup.sh
+	source "${CMDS_DIR}/setups/$1/setup.sh"
+	_setup
 }
 
 # return to $sys
