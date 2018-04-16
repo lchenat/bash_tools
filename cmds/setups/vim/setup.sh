@@ -18,6 +18,7 @@ function _setup() {
 				fi
 			fi
 			cp "${CMDS_DIR}/setups/vim/files/${file}" ~/.vimrc
+			break
 		else
 			echo "The file ${file} does not exist"
 		fi
