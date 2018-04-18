@@ -14,8 +14,13 @@ function send_git_ssh_key() {
 function setup() {
 	#chmod +x "${CMDS_DIR}/setups/$1/setup.sh"
 	#${CMDS_DIR}/setups/$1/setup.sh
-	source "${CMDS_DIR}/setups/$1/setup.sh"
-	_setup
+	if [ $1 == "-s" ]; then
+		source $2
+		_setup
+	else
+		source "${CMDS_DIR}/setups/$1/setup.sh"
+		_setup
+	fi
 }
 
 # return to $sys
@@ -62,4 +67,27 @@ function alt() {
 			echo "You can only input ${first} or ${second}"
 		fi
 	done
+}
+
+# path will store the install path
+function py-git-install() {
+	if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
+		echo "1:package_name 2:github_path 3:default_path"
+		return 1
+	fi
+	python -c "import $1" &>/dev/null
+	if (($? > 0)); then
+		read -p "input path to install $1 (default: $3): " path	
+		if [ -z $path ]; then
+			path=$3
+		fi
+		if [ ! -d ${path}/$1 ]; then
+			git clone $2 ${path}/$1
+			cd ${path}/$1
+			python setup.py develop
+			cd -
+		else
+			echo "$1 already installed"
+		fi
+	fi
 }
