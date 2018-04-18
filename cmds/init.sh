@@ -38,6 +38,15 @@ function save_vimrc() {
 	fi
 }
 
+# this works with setups/vim
+function save_gitconfig() {
+	if [ -z "$1" ]; then
+		echo "Please enter a name for your saved gitconfig"
+	else
+		cp ~/.gitconfig "${CMDS_DIR}/setups/git/files/$1"
+	fi
+}
+
 # alternate choices (yes/no)
 function alt() {
 	if [ -z "$2" ]; then
