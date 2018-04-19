@@ -59,3 +59,5 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 call vundle#end()
 :map <leader>o :tabe<CR>:Explore<CR>
+:map <leader>2 :set tabstop=2<CR>:set softtabstop=2<CR>:set shiftwidth=2<CR>
+:map <leader>4 :set tabstop=4<CR>:set softtabstop=4<CR>:set shiftwidth=4<CR>
