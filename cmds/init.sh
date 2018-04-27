@@ -17,6 +17,8 @@ function setup() {
 	if [ $1 == "-s" ]; then
 		source $2
 		_setup
+	elif [ $1 == "-g" ]; then
+		git clone "git@github.com:lchenat/${2}.git"
 	else
 		source "${CMDS_DIR}/setups/$1/setup.sh"
 		_setup
