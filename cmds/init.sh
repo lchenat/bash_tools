@@ -25,6 +25,13 @@ function setup() {
 	fi
 }
 
+function _complete_setup() {
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$(ls ${CMDS_DIR}/setups)" -- $cur) )
+}
+
+complete -F _complete_setup setup
+
 # return to $sys
 # Linux* or Darwin* (Mac)
 function get_sys() {
