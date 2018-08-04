@@ -24,41 +24,48 @@ function g() {
 		fpull)
 			git fetch --all && git reset --hard origin/master
 			;;
+		mb) # move branch to the current head
+			branch=${2-"master"}
+			git branch -D "$branch"
+			git branch "$branch"
+			git checkout "$branch"
+			;;
 		c) # check whether exp is runnable
-			s=$(git submodule update --init --recursive) # update submodule
-			s=$(git status --porcelain)
-			if ! [ -z "$s" ]; then 
-				echo "####### status procelain: files are modified #######"
-				echo "$s"
-			fi
-			#s=$( git status )
-			#if ! [[ $s = *"Your branch is up-to-date"* ]] || [[ $s = *"Changes not staged for commit"* ]] ; then
-				#echo "--- message on git status ---"
-				#git status
-			#fi
-			s=$( g cc )
-			if ! [ "$s" = "Up-to-date" ]; then
-				echo "####### branch check: branch not up to date #######"
-				echo "$s"
+			s=$( g bc )
+			if ! [ "$s" = "not a git file" ]; then
+				if ! [ "$s" = "Up-to-date" ]; then
+					echo "####### branch check: branch not up to date #######"
+					echo "$s"
+				fi
+				s=$(git submodule update --init --recursive) # update submodule
+				s=$(git status --porcelain)
+				if ! [ -z "$s" ]; then 
+					echo "####### status procelain: files are modified #######"
+					echo "$s"
+				fi
 			fi
 			;;
-		cc)
+		bc) # branch check
 			UPSTREAM='@{u}'
 			LOCAL=$(git rev-parse @)
-			REMOTE=$(git rev-parse "$UPSTREAM")
-			if ! [ -z "$REMOTE" ]; then 
-				BASE=$(git merge-base @ "$UPSTREAM")
-				if [ $LOCAL = $REMOTE ]; then
-					echo "Up-to-date"
-				elif [ $LOCAL = $BASE ]; then
-					echo "Need to pull"
-				elif [ $REMOTE = $BASE ]; then
-					echo "Need to push"
-				else
-					echo "Diverged"
-				fi
+			if [ -z "$LOCAL" ]; then
+				echo "not a git file"
 			else
-				echo "No upstream branch"
+				REMOTE=$(git rev-parse "$UPSTREAM")
+				if ! [ -z "$REMOTE" ]; then 
+					BASE=$(git merge-base @ "$UPSTREAM")
+					if [ $LOCAL = $REMOTE ]; then
+						echo "Up-to-date"
+					elif [ $LOCAL = $BASE ]; then
+						echo "Need to pull"
+					elif [ $REMOTE = $BASE ]; then
+						echo "Need to push"
+					else
+						echo "Diverged"
+					fi
+				else
+					echo "No upstream branch"
+				fi
 			fi
 			;;
 		*)

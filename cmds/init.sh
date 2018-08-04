@@ -121,6 +121,7 @@ function set_gpu() {
 function exp() {
 	success=${2-"exp.success"}
 	error=${3-"exp.error"}
+	lock=${4-".exp.lock"}
 	if ! [ -f "$1" ] || ! [ -s "$1" ]; then
 		echo "exp: exp file does not exist or it is empty"
 		return 1
@@ -131,9 +132,16 @@ function exp() {
 		echo "$check"
 		return 1
 	fi
+	id=$BASHPID
+	[[ -d ~/.exp ]] || mkdir ~/.exp
 	while true; do
-		# weird echo -n "", because without it the command will fail
-		flock .exp.lock echo -n "" && read -r cmd<"$1" && delete_first_line "$1"
+		(
+			flock 9 || exit 1
+			read -r cmd < "$1"
+			echo "$cmd" > ~/.exp/$id
+			delete_first_line "$1"
+		)9>"$lock"
+		read -r cmd < ~/.exp/$id
 		if ! [ -z "$cmd" ]; then
 			echo "command: $cmd"
 			$cmd
