@@ -109,3 +109,44 @@ function py-git-install() {
 		fi
 	fi
 }
+
+function delete_first_line() {
+	tail -n +2 "$1" > ".delete_first_line.${1}.tmp" && mv ".delete_first_line.${1}.tmp" "$1"
+}
+
+function set_gpu() {
+	export CUDA_VISIBLE_DEVICES=$1
+}
+
+function exp() {
+	success=${2-"exp.success"}
+	error=${3-"exp.error"}
+	if ! [ -f "$1" ] || ! [ -s "$1" ]; then
+		echo "exp: exp file does not exist or it is empty"
+		return 1
+	fi
+	check=$(g c)
+	if ! [ -z "$check" ]; then
+		echo "exp: git is not completely up to date"
+		echo "$check"
+		return 1
+	fi
+	while true; do
+		# weird echo -n "", because without it the command will fail
+		flock .exp.lock echo -n "" && read -r cmd<"$1" && delete_first_line "$1"
+		if ! [ -z "$cmd" ]; then
+			echo "command: $cmd"
+			$cmd
+			if [ $? -eq 0 ]; then
+				echo "exp: run successfully"
+				echo "$cmd" >> "$success"
+			else
+				echo "exp: execution failed, put into error"
+				echo "$cmd" >> "$error"
+			fi
+		fi
+		if ! [ -s "$1" ]; then
+			break
+		fi
+	done
+}
