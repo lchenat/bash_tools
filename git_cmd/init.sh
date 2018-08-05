@@ -24,6 +24,9 @@ function g() {
 		fpull)
 			git fetch --all && git reset --hard origin/master
 			;;
+		cm) # commit modified and deleted
+			git commit -a -m "$2"
+			;;
 		mb) # move branch to the current head
 			branch=${2-"master"}
 			git branch -D "$branch"
