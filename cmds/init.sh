@@ -127,10 +127,15 @@ function exp() {
 		return 1
 	fi
 	check=$(g c)
-	if ! [ -z "$check" ]; then
+	if [ "$check" = "not a git file" ]; then
+		echo "exp warning: not a git file, cannot verify version"
+	elif ! [ -z "$check" ]; then
 		echo "exp: git is not completely up to date"
 		echo "$check"
 		return 1
+	fi
+	if ! [ "$check" = "not a git file" ]; then
+		echo "commit version: $(git log --oneline -1)" > "$success"
 	fi
 	id=$BASHPID
 	[[ -d ~/.exp ]] || mkdir ~/.exp
