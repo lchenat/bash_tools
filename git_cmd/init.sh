@@ -46,6 +46,8 @@ function g() {
 					echo "####### status procelain: files are modified #######"
 					echo "$s"
 				fi
+			else
+				echo "$s"
 			fi
 			;;
 		bc) # branch check

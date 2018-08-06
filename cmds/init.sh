@@ -57,6 +57,7 @@ function save_gitconfig() {
 }
 
 # alternate choices (yes/no)
+# msg, first choice, second choice
 function alt() {
 	if [ -z "$2" ]; then
 		first="yes"
@@ -111,54 +112,103 @@ function py-git-install() {
 }
 
 function delete_first_line() {
-	tail -n +2 "$1" > ".delete_first_line.${1}.tmp" && mv ".delete_first_line.${1}.tmp" "$1"
+	uid=$BASHPID
+	tail -n +2 "$1" > ".delete_first_line.${uid}.tmp" && mv ".delete_first_line.${uid}.tmp" "$1"
 }
 
 function set_gpu() {
 	export CUDA_VISIBLE_DEVICES=$1
 }
 
+# Note: if you change the code during the job, it might effect the waiting job
 function exp() {
-	success=${2-"exp.success"}
-	error=${3-"exp.error"}
-	lock=${4-".exp.lock"}
+	# color for echo
+	RED=$(tput bold)
+	BOLD=$(tput setaf 1)
+	RS=$(tput sgr0)
+
+	# specify the file path
+	log_dir="${2-"${1}.exp.log"}"
+	success="${3-"exp.success"}"
+	error="${4-"exp.error"}"
+	prog="${5-"exp.prog"}"
+	lock="${6-".exp.lock"}"
 	if ! [ -f "$1" ] || ! [ -s "$1" ]; then
-		echo "exp: exp file does not exist or it is empty"
+		echo -e "${RED}${BOLD}exp:${RS} exp file does not exist or it is empty"
 		return 1
+	fi
+	[[ -d $log_dir ]] || mkdir $log_dir
+	new_exp=true
+	if ! [ -f "$log_dir/$prog" ]; then # new experiment
+		cp "$1" "$log_dir/$prog"
+	elif ! [ -s "$log_dir/$prog" ]; then # old finished experiment, resume?
+		alt "old finished experiment exists, do you want to replace it" "y" "n"
+		if $alt_res; then
+			cp "$1" "$log_dir/$prog"
+			> "$log_dir/$success"
+			> "$log_dir/$error"
+		else
+			return 1
+		fi
+	else
+		new_exp=false
 	fi
 	check=$(g c)
+	echo "$check"
 	if [ "$check" = "not a git file" ]; then
-		echo "exp warning: not a git file, cannot verify version"
+		echo -e "${RED}${BOLD}exp warning:${RS} not a git file, cannot verify version"
 	elif ! [ -z "$check" ]; then
-		echo "exp: git is not completely up to date"
+		echo -e "${RED}${BOLD}exp:${RS} git is not completely up to date"
 		echo "$check"
-		return 1
+		alt "do you want to run the exp anyway?" "y" "n"
+		if ! $alt_res; then
+			return 1
+		fi
 	fi
 	if ! [ "$check" = "not a git file" ]; then
-		echo "commit version: $(git log --oneline -1)" > "$success"
+		if $new_exp; then
+			echo "commit version: $(git log --oneline -1)" > "$log_dir/$success"
+			echo "commit version: $(git log --oneline -1)" > "$log_dir/$error"
+		else # try to join an experiment, need to verify git version
+			cur="commit version: $(git log --oneline -1)"
+			read -r fl < "$log_dir/$success"
+			if [ "$cur" != "$fl" ]; then
+				echo "${RED}${BOLD}exp:${RS} current git version modified, cannot join the origin job"
+				return 1
+			fi
+		fi
 	fi
 	id=$BASHPID
 	[[ -d ~/.exp ]] || mkdir ~/.exp
+	# clear accidently left EXIT signal
+	rm -rf ~/.exp/$id.EXIT
+	# experiments retrieval loop
 	while true; do
 		(
 			flock 9 || exit 1
-			read -r cmd < "$1"
+			read -r cmd < "$log_dir/$prog"
 			echo "$cmd" > ~/.exp/$id
-			delete_first_line "$1"
-		)9>"$lock"
+			delete_first_line "$log_dir/$prog"
+		)9>"$log_dir/$lock"
 		read -r cmd < ~/.exp/$id
-		if ! [ -z "$cmd" ]; then
-			echo "command: $cmd"
-			$cmd
+		if [ -s ~/.exp/$id ]; then
+			echo -e "${RED}${BOLD}command:${RS} $cmd"
+			bash $CMDS_DIR/exp_run ~/.exp/$id $log_dir/$lock $log_dir/$prog $id
+			# clean up after execution
+			> ~/.exp/$id
+			if [ -f ~/.exp/$id.EXIT ]; then
+				rm -rf ~/.exp/$id.EXIT
+				break
+			fi
 			if [ $? -eq 0 ]; then
-				echo "exp: run successfully"
-				echo "$cmd" >> "$success"
+				echo -e "${RED}${BOLD}exp:${RS} run successfully"
+				flock "$log_dir/$lock" echo "$cmd" >> "$log_dir/$success"
 			else
-				echo "exp: execution failed, put into error"
-				echo "$cmd" >> "$error"
+				echo -e "${RED}${BOLD}exp:${RS} execution failed, put into error"
+				flock "$log_dir/$lock" echo "$cmd" >> "$log_dir/$error"
 			fi
 		fi
-		if ! [ -s "$1" ]; then
+		if ! [ -s "$log_dir/$prog" ]; then
 			break
 		fi
 	done

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+_exp=$1
+_lock=$2
+_prog=$3
+_id=$4
+
+# program, lock, prog
+function cleanup() {
+	echo "clean up !"
+	if [ -s $_exp ]; then
+		read -r cmd < $_exp
+		flock $_lock echo "$cmd" >> $_prog
+	fi
+	# create exit signal
+	touch ~/.exp/$_id.EXIT
+	exit
+}
+trap cleanup INT
+
+. $_exp
+
