@@ -191,7 +191,7 @@ function exp() {
 			delete_first_line "$log_dir/$prog"
 		)9>"$log_dir/$lock"
 		read -r cmd < ~/.exp/$id
-		if [ -s ~/.exp/$id ]; then
+		if [ -s ~/.exp/$id ] && ! [[ "$cmd" == \#* ]]; then
 			echo -e "${RED}${BOLD}command:${RS} $cmd"
 			bash $CMDS_DIR/exp_run ~/.exp/$id $log_dir/$lock $log_dir/$prog $id
 			# clean up after execution
