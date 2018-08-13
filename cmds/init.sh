@@ -166,6 +166,9 @@ function exp() {
 		fi
 	fi
 	if ! [ "$check" = "not a git file" ]; then
+		if ! [ -f "$log_dir/$success" ]; then
+			new_exp=true
+		fi
 		if $new_exp; then
 			echo "commit version: $(git log --oneline -1)" > "$log_dir/$success"
 			echo "commit version: $(git log --oneline -1)" > "$log_dir/$error"
