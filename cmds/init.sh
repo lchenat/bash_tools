@@ -120,6 +120,10 @@ function set_gpu() {
 	export CUDA_VISIBLE_DEVICES=$1
 }
 
+function gpu() {
+	echo "gpu: $CUDA_VISIBLE_DEVICES"
+}
+
 # Note: if you change the code during the job, it might effect the waiting job
 function exp() {
 	# color for echo
