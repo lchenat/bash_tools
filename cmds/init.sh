@@ -220,3 +220,34 @@ function exp() {
 		fi
 	done
 }
+
+# make sure you are in the correct environment
+# github install will be commented
+function py_reqs() {
+	save_path="${2-"$1/requirements.txt"}"
+	if [ -z "$( command -v pipreqs )" ]; then
+		alt "pipreqs not found. Do you want to install it?" "y" "n"
+		if $alt_res; then
+			pip install pipreqs
+		else
+			return 1
+		fi
+	fi
+	pipreqs --savepath ~/.py_reqs.pyreqs --force "$1"
+	pip freeze > ~/.py_reqs.freeze
+	> $save_path
+	while read p; do
+		if [[ "$p" == *info ]]; then # ==info
+			q=".egg"
+			name=${p%$q*}
+			echo "github install: $name"
+			line=$( cat ~/.py_reqs.freeze | grep "\-e .*=$name" )
+			echo "# $line" >> $save_path
+		else
+			echo "$p" >> $save_path
+		fi
+	done < ~/.py_reqs.pyreqs
+	# remove tmp file
+	rm -rf ~/.py_reqs.pyreqs
+	rm -rf ~/.py_reqs.freeze
+}
