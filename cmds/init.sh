@@ -221,6 +221,7 @@ function exp() {
 	done
 }
 
+# get python dependency in requirements.txt format for all .py in one directory
 # make sure you are in the correct environment
 # github install will be commented
 function py_reqs() {
