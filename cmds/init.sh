@@ -56,6 +56,16 @@ function save_gitconfig() {
 	fi
 }
 
+function save_id_rsa() {
+	if [ -z "$1" ]; then
+		echo "Please enter a name for your saved id_rsa"
+	else
+		mkdir -p "${CMDS_DIR}/setups/id_rsa/files/$1"
+		cp ~/.ssh/id_rsa "${CMDS_DIR}/setups/id_rsa/files/$1/"
+		cp ~/.ssh/id_rsa.pub "${CMDS_DIR}/setups/id_rsa/files/$1/"
+	fi
+}
+
 # alternate choices (yes/no)
 # msg, first choice, second choice
 function alt() {
