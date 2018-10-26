@@ -7,7 +7,7 @@ function _setup() {
 	echo $( ls "${CMDS_DIR}/setups/$fn/files" )
 	while true; do
 		read -p "Please input the name of the $fn you want to install:" file
-		if [ -f "${CMDS_DIR}/setups/$fn/files/${file}" ]; then
+		if [ -d "${CMDS_DIR}/setups/$fn/files/${file}" ]; then
 			if [ -f ~/.ssh/id_rsa ]; then
 				alt "$fn exists, do you want to save it to ${fn}_bp?"
 				if ${alt_res}; then
