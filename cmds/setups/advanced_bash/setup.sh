@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Install anaconda, the anaconda version may have been updated
 function _setup() {
 	# autocd, fast cd
 	sys="$( uname -s )"
