@@ -98,6 +98,13 @@ function alt() {
 	done
 }
 
+# search through direcotry $1 and match the word $2
+# can specify other option on the rest of arguments (-w: match the whole word)
+function search() {
+	args=( "$@" )
+	grep --color=always -rn $1 -e $2 "${args[@]:2}"
+}
+
 # path will store the install path
 function py-git-install() {
 	if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
