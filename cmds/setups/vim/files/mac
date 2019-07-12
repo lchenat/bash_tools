@@ -84,5 +84,7 @@ noremap <leader><Right> :+tabmove<cr>
 :map <Leader>. :set hlsearch<CR>
 :map <Leader>H :set nohlsearch<CR>
 :set incsearch
-:map <Leader>/ :set nohlsearch<CR> 
+:map <Leader>/ :set nohlsearch<CR>
 ":map <Leader>/ :noh<CR>
+" remove unwanted spaces
+:map <Leader>s :%s/\s\+$//e<CR>
