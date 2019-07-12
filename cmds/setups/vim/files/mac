@@ -81,6 +81,8 @@ augroup END
 :map <leader>4 :set tabstop=4<CR>:set softtabstop=4<CR>:set shiftwidth=4<CR>
 noremap <leader><Left>  :-tabmove<cr>
 noremap <leader><Right> :+tabmove<cr>
-:set hlsearch
+:map <Leader>. :set hlsearch<CR>
+:map <Leader>H :set nohlsearch<CR>
 :set incsearch
-:map <Leader>/ :noh<CR>
+:map <Leader>/ :set nohlsearch<CR> 
+":map <Leader>/ :noh<CR>
