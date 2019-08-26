@@ -63,3 +63,5 @@ call vundle#end()
 :map <leader>4 :set tabstop=4<CR>:set softtabstop=4<CR>:set shiftwidth=4<CR>
 noremap <leader><Left>  :-tabmove<cr>
 noremap <leader><Right> :+tabmove<cr>
+:map <leader>. :set hlsearch<cr>
+:map <leader>/ :noh<cr>
