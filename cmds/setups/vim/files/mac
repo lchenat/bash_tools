@@ -71,13 +71,20 @@ augroup BashCmd
   autocmd FileType sh :nnoremap <leader>d ^x
 augroup END
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'scrooloose/nerdtree'
-call vundle#end()
+" set rtp+=~/.vim/bundle/Vundle.vim
+" call vundle#begin()
+" Plugin 'VundleVim/Vundle.vim'
+" Plugin 'scrooloose/nerdtree'
+" call vundle#end()
 :map <leader>o :tabe<CR>:Explore<CR>
 :map <leader>2 :set tabstop=2<CR>:set softtabstop=2<CR>:set shiftwidth=2<CR>
 :map <leader>4 :set tabstop=4<CR>:set softtabstop=4<CR>:set shiftwidth=4<CR>
 noremap <leader><Left>  :-tabmove<cr>
 noremap <leader><Right> :+tabmove<cr>
+:map <Leader>. :set hlsearch<CR>
+:map <Leader>H :set nohlsearch<CR>
+:set incsearch
+:map <Leader>/ :set nohlsearch<CR>
+":map <Leader>/ :noh<CR>
+" remove unwanted spaces
+:map <Leader>s :%s/\s\+$//e<CR>

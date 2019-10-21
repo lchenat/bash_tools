@@ -238,6 +238,34 @@ function exp() {
 	done
 }
 
+# https://www.pmg.com/blog/how-to-set-up-directory-specific-bash-or-other-shell-environments/
+# https://github.com/chrisguitarguy/dotfiles/blob/master/bash/functions.sh
+function make_env() {
+    local env="$PWD/.env"
+    if [ -f "$env" ]; then
+        if [ -z "$CURRENT_ENV" ]; then
+            # no current environment, source .env file
+            builtin source "$env"
+            export CURRENT_ENV="$env"
+        elif [ ! "$CURRENT_ENV" = "$env" ]; then
+            # we have a current environment setup
+            # the environ we have setup is not this one
+            # check to see if we have a deactivate function to run
+            if [ "$(type -t deactivate)" = "function" ]; then
+                deactivate
+            fi
+            builtin source "$env"
+            export CURRENT_ENV="$env"
+        fi
+    fi
+}
+
+function env_cd() {
+    if builtin cd "$@"; then
+        make_env
+	fi
+}
+
 # get python dependency in requirements.txt format for all .py in one directory
 # make sure you are in the correct environment
 # github install will be commented
@@ -268,34 +296,6 @@ function py_reqs() {
 	# remove tmp file
 	rm -rf ~/.py_reqs.pyreqs
 	rm -rf ~/.py_reqs.freeze
-}
-
-# https://www.pmg.com/blog/how-to-set-up-directory-specific-bash-or-other-shell-environments/
-# https://github.com/chrisguitarguy/dotfiles/blob/master/bash/functions.sh
-function make_env() {
-    local env="$PWD/.env"
-    if [ -f "$env" ]; then
-        if [ -z "$CURRENT_ENV" ]; then
-            # no current environment, source .env file
-            builtin source "$env"
-            export CURRENT_ENV="$env"
-        elif [ ! "$CURRENT_ENV" = "$env" ]; then
-            # we have a current environment setup
-            # the environ we have setup is not this one
-            # check to see if we have a deactivate function to run
-            if [ "$(type -t deactivate)" = "function" ]; then
-                deactivate
-            fi
-            builtin source "$env"
-            export CURRENT_ENV="$env"
-        fi
-    fi
-}
-
-function env_cd() {
-    if builtin cd "$@"; then
-        make_env
-	fi
 }
 
 alias cd="env_cd"
