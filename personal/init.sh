@@ -16,5 +16,10 @@ function unmount-borg() {
 		echo 'please specify directory to mount borg'
 		return
     fi
-	umount -f $borg_dir
+    # Terminal Themes
+    if [ $OSTYPE = "linux-gnu" ]; then
+        fusermount -zu $borg_dir
+    elif [ $OSTYPE == "darwin"* ]; then
+		umount -f $borg_dir
+    fi
 }
