@@ -1,5 +1,5 @@
 function set-borg-path() {
-	export borg_path=$1
+	export borg_path=$( realpath $1 )
 }
 
 function get-borg-path() {
