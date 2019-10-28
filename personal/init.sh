@@ -1,5 +1,13 @@
+function set-borg-path() {
+	export borg_path=$1
+}
+
+function get-borg-path() {
+	echo $borg_path
+}
+
 function mount-borg() {
-    borg_dir=$1
+    borg_dir=$borg_path
     if [ -z "$borg_dir" ]; then
 		echo 'please specify directory to mount borg'
 		return
@@ -11,7 +19,7 @@ function mount-borg() {
 }
 
 function unmount-borg() {
-    borg_dir=$1
+    borg_dir=$borg_path
     if [ -z "$borg_dir" ]; then
 		echo 'please specify directory to mount borg'
 		return
@@ -22,4 +30,11 @@ function unmount-borg() {
     elif [ $OSTYPE == "darwin"* ]; then
 		umount -f $borg_dir
     fi
+}
+
+function refresh-borg() {
+	cd ~
+	unmount-borg
+	mount-borg
+	cd -
 }
