@@ -35,6 +35,7 @@ function unmount-borg() {
 function refresh-borg() {
 	cd ~
 	unmount-borg
+	#rm -rf $borg_path/*
 	mount-borg
 	cd -
 }
