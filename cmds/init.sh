@@ -48,6 +48,15 @@ function save_vimrc() {
 }
 
 # this works with setups/vim
+function save_tmux() {
+	if [ -z "$1" ]; then
+		echo "Please enter a name for your saved tmux.conf"
+	else
+		cp ~/.tmux.conf "${CMDS_DIR}/setups/tmux/files/$1"
+	fi
+}
+
+# this works with setups/vim
 function save_gitconfig() {
 	if [ -z "$1" ]; then
 		echo "Please enter a name for your saved gitconfig"
