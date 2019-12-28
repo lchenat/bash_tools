@@ -15,7 +15,8 @@ function mount-borg() {
     if [ ! -d $borg_dir ]; then
         mkdir $borg_dir
     fi
-	sshfs -o cache=no -o kernel_cache -o compression=no liyuc@dash-borg.usc.edu:/media/borg2/liyuc/ $borg_dir # Use -o Ciphers=arcfour when supported
+	#sshfs -o cache=no -o kernel_cache -o compression=no liyuc@dash-borg.usc.edu:/media/borg2/liyuc/ $borg_dir # Use -o Ciphers=arcfour when supported
+	sshfs -o cache=yes -o kernel_cache -o compression=no liyuc@dash-borg.usc.edu:/media/borg2/liyuc/ $borg_dir
 }
 
 function unmount-borg() {
