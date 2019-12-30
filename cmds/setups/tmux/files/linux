@@ -1,4 +1,2 @@
-bind-key a set -g mouse on
-bind-key A set -g mouse off
-bind-key \ setw synchronize-panes on
-bind-key | setw synchronize-panes off
+bind-key a set -g mouse
+bind-key \ setw synchronize-panes
